@@ -1,0 +1,85 @@
+/* Garantir que todos os textos sejam brancos para melhor visibilidade */
+
+/* Substituir todas as classes text-muted por text-white */
+.text-muted {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Garantir que todos os pequenos textos sejam brancos */
+small {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Garantir que todos os parágrafos sejam brancos */
+p {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Garantir que todos os spans e divs tenham texto branco */
+span, div {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Garantir que todos os cabeçalhos sejam brancos */
+h1, h2, h3, h4, h5, h6 {
+    color: white !important;
+}
+
+/* Garantir que todas as labels sejam brancas */
+label {
+    color: white !important;
+}
+
+/* Garantir que todos os links sejam visíveis */
+a:not(.btn) {
+    color: #b688ff !important;
+}
+
+a:not(.btn):hover {
+    color: #d4b8ff !important;
+}
+
+/* Tornar mais textos específicos brancos */
+.card-body {
+    color: white;
+}
+
+.dropdown-item {
+    color: white !important;
+}
+
+.menu-text {
+    color: white !important;
+}
+
+/* Cores de status e valores não devem ser afetadas */
+.positive-value {
+    color: #4caf50 !important;
+}
+
+.negative-value {
+    color: #f44336 !important;
+}
+
+.btn {
+    color: inherit;
+}
+
+/* Garantir que textos em tabelas sejam brancos */
+table {
+    color: white !important;
+}
+
+th, td {
+    color: white !important;
+}
+
+/* Garantir que todos os alertas e notificações mantenham suas cores */
+.alert, .notification {
+    color: inherit;
+}
+
+/* Manter cores dos ícones */
+i[class*="fa-"] {
+    color: inherit;
+}

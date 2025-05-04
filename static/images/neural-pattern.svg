@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1000" height="500" viewBox="0 0 1000 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7b2cbf" />
+      <stop offset="100%" stop-color="#4cc9f0" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Nodes -->
+  <circle cx="150" cy="100" r="10" fill="url(#nodeGradient)" />
+  <circle cx="150" cy="200" r="10" fill="url(#nodeGradient)" />
+  <circle cx="150" cy="300" r="10" fill="url(#nodeGradient)" />
+  <circle cx="150" cy="400" r="10" fill="url(#nodeGradient)" />
+  
+  <circle cx="300" cy="120" r="10" fill="url(#nodeGradient)" />
+  <circle cx="300" cy="240" r="10" fill="url(#nodeGradient)" />
+  <circle cx="300" cy="360" r="10" fill="url(#nodeGradient)" />
+  
+  <circle cx="450" cy="150" r="10" fill="url(#nodeGradient)" />
+  <circle cx="450" cy="300" r="10" fill="url(#nodeGradient)" />
+  
+  <circle cx="600" cy="200" r="10" fill="url(#nodeGradient)" />
+  <circle cx="600" cy="400" r="10" fill="url(#nodeGradient)" />
+  
+  <circle cx="750" cy="150" r="10" fill="url(#nodeGradient)" />
+  <circle cx="750" cy="300" r="10" fill="url(#nodeGradient)" />
+  
+  <circle cx="900" cy="250" r="10" fill="url(#nodeGradient)" />
+  
+  <!-- Connections Layer 1 to 2 -->
+  <line x1="150" y1="100" x2="300" y2="120" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="100" x2="300" y2="240" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="100" x2="300" y2="360" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="150" y1="200" x2="300" y2="120" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="200" x2="300" y2="240" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="200" x2="300" y2="360" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="150" y1="300" x2="300" y2="120" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="300" x2="300" y2="240" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="300" x2="300" y2="360" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="150" y1="400" x2="300" y2="120" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="400" x2="300" y2="240" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="150" y1="400" x2="300" y2="360" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <!-- Connections Layer 2 to 3 -->
+  <line x1="300" y1="120" x2="450" y2="150" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="300" y1="120" x2="450" y2="300" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="300" y1="240" x2="450" y2="150" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="300" y1="240" x2="450" y2="300" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="300" y1="360" x2="450" y2="150" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="300" y1="360" x2="450" y2="300" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <!-- Connections Layer 3 to 4 -->
+  <line x1="450" y1="150" x2="600" y2="200" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="450" y1="150" x2="600" y2="400" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="450" y1="300" x2="600" y2="200" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="450" y1="300" x2="600" y2="400" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <!-- Connections Layer 4 to 5 -->
+  <line x1="600" y1="200" x2="750" y2="150" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="600" y1="200" x2="750" y2="300" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <line x1="600" y1="400" x2="750" y2="150" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="600" y1="400" x2="750" y2="300" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <!-- Connections Layer 5 to 6 -->
+  <line x1="750" y1="150" x2="900" y2="250" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  <line x1="750" y1="300" x2="900" y2="250" stroke="white" stroke-opacity="0.3" stroke-width="1" />
+  
+  <!-- Add some animation dots -->
+  <circle cx="170" cy="120" r="3" fill="#9d4edd">
+    <animate attributeName="cx" values="150;300" dur="3s" repeatCount="indefinite" />
+    <animate attributeName="cy" values="100;120" dur="3s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="220" cy="280" r="3" fill="#4cc9f0">
+    <animate attributeName="cx" values="150;300" dur="4s" repeatCount="indefinite" />
+    <animate attributeName="cy" values="300;240" dur="4s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="350" cy="200" r="3" fill="#9d4edd">
+    <animate attributeName="cx" values="300;450" dur="2.5s" repeatCount="indefinite" />
+    <animate attributeName="cy" values="240;150" dur="2.5s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="500" cy="250" r="3" fill="#4cc9f0">
+    <animate attributeName="cx" values="450;600" dur="3.5s" repeatCount="indefinite" />
+    <animate attributeName="cy" values="150;200" dur="3.5s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="650" cy="300" r="3" fill="#9d4edd">
+    <animate attributeName="cx" values="600;750" dur="3s" repeatCount="indefinite" />
+    <animate attributeName="cy" values="200;300" dur="3s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="800" cy="220" r="3" fill="#4cc9f0">
+    <animate attributeName="cx" values="750;900" dur="2.5s" repeatCount="indefinite" />
+    <animate attributeName="cy" values="150;250" dur="2.5s" repeatCount="indefinite" />
+  </circle>
+</svg>

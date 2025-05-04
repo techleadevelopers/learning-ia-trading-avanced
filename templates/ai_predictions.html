@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block title %}AI Predictions | NeuralTrade X{% endblock %}
+
+{% block page_title %}AI Predictions{% endblock %}
+
+{% block authenticated_content %}
+<div class="container-fluid px-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card gradient-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="text-white">Next-Gen Neural Network Bitcoin Price Predictor</h5>
+                            <p class="text-white-50">Previsões com algoritmos avançados de IA e Machine Learning para antecipar movimentos do mercado.</p>
+                        </div>
+                        <div class="prediction-accuracy">
+                            <div class="accuracy-meter">
+                                <div class="accuracy-circle">
+                                    <span class="accuracy-value">85%</span>
+                                </div>
+                            </div>
+                            <span class="accuracy-label text-white-50">Precisão do Modelo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Previsão de Preço do Bitcoin</h5>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-outline-primary prediction-interval active" data-interval="24h">24h</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary prediction-interval" data-interval="7d">7d</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary prediction-interval" data-interval="30d">30d</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="position-relative">
+                        <div id="prediction-chart" style="height: 400px;"></div>
+                        <div class="chart-loader d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Previsão Atual</h5>
+                </div>
+                <div class="card-body">
+                    <div class="prediction-stats">
+                        <div class="predict-header d-flex justify-content-between align-items-center mb-3">
+                            <span>Em 24 horas</span>
+                            <span class="badge bg-success">Grande Confiança</span>
+                        </div>
+                        
+                        <div class="predict-price text-center mb-4">
+                            <h2 class="current-price">$41,250.00</h2>
+                            <div class="price-change positive">
+                                <i class="fas fa-arrow-up me-1"></i>
+                                <span>$1,250.00 (3.12%)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="prediction-range mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Faixa de Previsão:</span>
+                                <span>$40,800 - $42,500</span>
+                            </div>
+                            <div class="range-bar"></div>
+                        </div>
+                        
+                        <table class="table table-sm prediction-details">
+                            <tbody>
+                                <tr>
+                                    <td>Probabilidade de Alta:</td>
+                                    <td class="text-end">75%</td>
+                                </tr>
+                                <tr>
+                                    <td>Probabilidade de Queda:</td>
+                                    <td class="text-end">25%</td>
+                                </tr>
+                                <tr>
+                                    <td>Volatilidade Esperada:</td>
+                                    <td class="text-end">Média</td>
+                                </tr>
+                                <tr>
+                                    <td>Modelo Utilizado:</td>
+                                    <td class="text-end">NeuralTrade X DeepNet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <button id="generate-prediction" class="btn btn-primary btn-block w-100 mt-4">
+                            <i class="fas fa-sync-alt me-2"></i> Atualizar Previsão
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xl-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Análise de Sentimento do Mercado</h5>
+                </div>
+                <div class="card-body">
+                    <div class="sentiment-gauge mb-3" id="sentiment-gauge"></div>
+                    <div class="sentiment-details">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="sentiment-indicator fear">
+                                    <span class="value">28%</span>
+                                    <span class="label">Medo</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="sentiment-indicator neutral">
+                                    <span class="value">42%</span>
+                                    <span class="label">Neutro</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="sentiment-indicator greed">
+                                    <span class="value">30%</span>
+                                    <span class="label">Ganância</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sentiment-sources mt-4">
+                            <h6>Fontes Analisadas:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fab fa-twitter me-2"></i> Social Media</li>
+                                <li><i class="fas fa-newspaper me-2"></i> Notícias</li>
+                                <li><i class="fas fa-exchange-alt me-2"></i> Atividade de Exchange</li>
+                                <li><i class="fas fa-chart-line me-2"></i> Dados de Mercado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Fatores Influenciadores</h5>
+                </div>
+                <div class="card-body">
+                    <div class="impact-factors">
+                        <div class="impact-factor">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>RSI Divergente</span>
+                                <span class="factor-weight positive">+2.8</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 68%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-factor">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Volume Crescente</span>
+                                <span class="factor-weight positive">+3.5</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-factor">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Tendência de Queda</span>
+                                <span class="factor-weight negative">-2.1</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-factor">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Padrão Bullish</span>
+                                <span class="factor-weight positive">+4.2</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-factor">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Volatilidade Alta</span>
+                                <span class="factor-weight negative">-1.8</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="impact-summary">
+                        <div class="d-flex justify-content-between">
+                            <span>Impacto Total:</span>
+                            <span class="positive">+6.6 (Positivo)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Previsões Recentes</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table recent-predictions-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Previsão</th>
+                                    <th>Atual</th>
+                                    <th>Precisão</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1 Mai</td>
+                                    <td class="positive">$40,250</td>
+                                    <td>$40,120</td>
+                                    <td><span class="badge bg-success">99.7%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>30 Abr</td>
+                                    <td class="positive">$39,850</td>
+                                    <td>$40,010</td>
+                                    <td><span class="badge bg-success">99.6%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>29 Abr</td>
+                                    <td class="negative">$41,200</td>
+                                    <td>$39,950</td>
+                                    <td><span class="badge bg-danger">97.0%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>28 Abr</td>
+                                    <td class="positive">$38,750</td>
+                                    <td>$38,820</td>
+                                    <td><span class="badge bg-success">99.8%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>27 Abr</td>
+                                    <td class="positive">$38,400</td>
+                                    <td>$38,500</td>
+                                    <td><span class="badge bg-success">99.7%</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-link btn-sm">Ver histórico completo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.prediction-accuracy {
+    text-align: center;
+}
+
+.accuracy-meter {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+}
+
+.accuracy-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(88, 43, 255, 0.8), rgba(184, 76, 255, 0.8));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(184, 76, 255, 0.7);
+}
+
+.accuracy-value {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.accuracy-label {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+}
+
+.prediction-stats .current-price {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.price-change {
+    font-size: 1.1rem;
+}
+
+.price-change.positive {
+    color: var(--success);
+}
+
+.price-change.negative {
+    color: var(--danger);
+}
+
+.prediction-range .range-bar {
+    height: 8px;
+    background: linear-gradient(to right, #ff4b4b 0%, #ffb74d 50%, #4caf50 100%);
+    border-radius: 4px;
+}
+
+.prediction-details {
+    font-size: 0.9rem;
+}
+
+.sentiment-gauge {
+    height: 180px;
+    margin: 0 auto;
+}
+
+.sentiment-indicator {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sentiment-indicator.fear {
+    background-color: rgba(255, 82, 82, 0.1);
+}
+
+.sentiment-indicator.neutral {
+    background-color: rgba(253, 216, 53, 0.1);
+}
+
+.sentiment-indicator.greed {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.sentiment-indicator .value {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.sentiment-indicator .label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.factor-weight.positive {
+    color: var(--success);
+}
+
+.factor-weight.negative {
+    color: var(--danger);
+}
+
+.impact-summary .positive {
+    color: var(--success);
+    font-weight: bold;
+}
+
+.impact-summary .negative {
+    color: var(--danger);
+    font-weight: bold;
+}
+
+.recent-predictions-table th, 
+.recent-predictions-table td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+}
+
+.recent-predictions-table .positive {
+    color: var(--success);
+}
+
+.recent-predictions-table .negative {
+    color: var(--danger);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Simulação de inicialização do gráfico de previsão
+    initPredictionChart();
+    
+    // Simulação do medidor de sentimento
+    initSentimentGauge();
+    
+    // Event listeners para os botões de intervalo
+    document.querySelectorAll('.prediction-interval').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelector('.prediction-interval.active').classList.remove('active');
+            this.classList.add('active');
+            updatePrediction(this.dataset.interval);
+        });
+    });
+    
+    // Event listener para o botão de atualização
+    document.getElementById('generate-prediction').addEventListener('click', function() {
+        const interval = document.querySelector('.prediction-interval.active').dataset.interval;
+        updatePrediction(interval, true);
+    });
+});
+
+function initPredictionChart() {
+    // Implementação do gráfico de previsão
+    // Esta é uma função placeholder que seria substituída por uma implementação real
+    console.log('Prediction chart initialized');
+}
+
+function initSentimentGauge() {
+    // Implementação do medidor de sentimento
+    // Esta é uma função placeholder que seria substituída por uma implementação real
+    console.log('Sentiment gauge initialized');
+}
+
+function updatePrediction(interval, showLoader = false) {
+    // Simulação de atualização da previsão com base no intervalo
+    if (showLoader) {
+        document.querySelector('.chart-loader').classList.remove('d-none');
+        setTimeout(() => {
+            document.querySelector('.chart-loader').classList.add('d-none');
+        }, 1500);
+    }
+    
+    console.log(`Updating prediction for interval: ${interval}`);
+}
+</script>
+{% endblock %}

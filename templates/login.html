@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Login | NeuralTrade X{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7 col-sm-9">
+        <div class="auth-container animate-fade-in glass-card">
+            <div class="auth-logo text-center">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="NeuralTrade X Logo" height="80" class="mb-2">
+                <h3 class="mb-0">NeuralTrade<span class="text-gradient">X</span></h3>
+                <p class="text-muted">Ultimate AI Trading Platform</p>
+            </div>
+            
+            <h2 class="text-center mb-4">Acesso à Plataforma</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form class="auth-form" method="POST" action="{{ url_for('login') }}">
+                <div class="form-group mb-4">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Digite seu email" required autofocus>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label for="password" class="form-label">Senha</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Digite sua senha" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">
+                            Lembrar acesso
+                        </label>
+                    </div>
+                    <div>
+                        <a href="#" class="text-decoration-none">Esqueceu a senha?</a>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-glow btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Entrar na Plataforma
+                    </button>
+                </div>
+            </form>
+            
+            <div class="auth-links mt-4 text-center">
+                <p>Não tem uma conta? <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold">Criar conta agora</a></p>
+            </div>
+            
+            <div class="mt-4">
+                <div class="alert bg-dark border border-primary">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle me-3 text-primary fa-2x"></i>
+                        <div>
+                            <strong>Conta de demonstração:</strong>
+                            <div class="mt-2">
+                                <div><strong>Email:</strong> demo@example.com</div>
+                                <div><strong>Senha:</strong> demo123</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auth-features mt-4">
+                <div class="row g-3 text-center">
+                    <div class="col-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="feature-text">AI Avançada</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-text">Trading Precision</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-text">100% Seguro</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle eye icon
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    }
+});
+</script>
+
+<style>
+.auth-container {
+    padding: 40px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 20px;
+}
+
+.feature-icon {
+    background: linear-gradient(135deg, var(--purple-accent), var(--blue-accent));
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    color: white;
+    font-size: 1.3rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.feature-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.auth-form .form-control {
+    background-color: rgba(22, 33, 62, 0.7);
+    border-color: rgba(157, 78, 221, 0.2);
+    color: white;
+    transition: all 0.3s;
+}
+
+.auth-form .form-control:focus {
+    background-color: rgba(22, 33, 62, 0.9);
+    border-color: var(--purple-neon);
+    box-shadow: 0 0 0 0.25rem rgba(157, 78, 221, 0.25);
+}
+
+.auth-form .input-group-text {
+    background-color: rgba(22, 33, 62, 0.9);
+    border-color: rgba(157, 78, 221, 0.2);
+    color: var(--purple-neon);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,548 @@
+{% extends "base.html" %}
+
+{% block title %}Technical Analysis | NeuralTrade X{% endblock %}
+
+{% block page_title %}Technical Analysis{% endblock %}
+
+{% block authenticated_content %}
+<div class="container-fluid px-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card gradient-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-white">Análise Técnica Avançada</h5>
+                            <p class="text-white-50">Análise técnica profissional com mais de 25 indicadores e padrões complexos de candlestick.</p>
+                        </div>
+                        <div class="timeframe-selector">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-dark" data-timeframe="1h">1H</button>
+                                <button type="button" class="btn btn-primary" data-timeframe="4h">4H</button>
+                                <button type="button" class="btn btn-dark" data-timeframe="1d">1D</button>
+                                <button type="button" class="btn btn-dark" data-timeframe="1w">1W</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <!-- Main Chart Card -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Bitcoin (BTC/USDT)</h5>
+                    <div class="chart-controls">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary chart-type active" data-type="candles">Candles</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary chart-type" data-type="line">Line</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary chart-type" data-type="heikin-ashi">Heikin-Ashi</button>
+                        </div>
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="indicatorDropdown" data-bs-toggle="dropdown">
+                                + Indicators
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="indicatorDropdown">
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="sma">SMA</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="ema">EMA</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="bollinger">Bollinger Bands</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="ichimoku">Ichimoku Cloud</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="fibonacci">Fibonacci Retracement</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="volumes">Volume</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="macd">MACD</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="rsi">RSI</a></li>
+                                <li><a class="dropdown-item indicator-option" href="#" data-indicator="stoch">Stochastic</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="position-relative">
+                        <div id="advanced-chart" style="height: 600px;"></div>
+                        <div class="chart-loader d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pattern Recognition Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Pattern Recognition</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="pattern-container detected">
+                                <div class="pattern-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">Bullish Engulfing</h6>
+                                    <span class="badge bg-success">Detected</span>
+                                </div>
+                                <div class="pattern-visual">
+                                    <img src="{{ url_for('static', filename='images/patterns/bullish-engulfing.svg') }}" alt="Bullish Engulfing Pattern">
+                                </div>
+                                <div class="pattern-details">
+                                    <p>Strong bullish reversal pattern detected at the bottom of a downtrend. Success rate: 78%</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="pattern-container">
+                                <div class="pattern-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">Double Bottom</h6>
+                                    <span class="badge bg-secondary">Forming</span>
+                                </div>
+                                <div class="pattern-visual">
+                                    <img src="{{ url_for('static', filename='images/patterns/double-bottom.svg') }}" alt="Double Bottom Pattern">
+                                </div>
+                                <div class="pattern-details">
+                                    <p>Potential double bottom formation in progress. Confirmation needed at $40,500 level.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <!-- Market Stats -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Market Stats</h5>
+                </div>
+                <div class="card-body">
+                    <div class="current-price mb-4">
+                        <div class="d-flex justify-content-between">
+                            <span>Preço atual:</span>
+                            <h3 id="current-btc-price">$42,235.45</h3>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>24h Change:</span>
+                            <span class="price-change positive">+$1,235.40 (3.15%)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="price-levels">
+                        <h6>Key Price Levels</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="key-level-label text-success">Strong Support:</span>
+                            <span class="key-level-value">$40,200</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="key-level-label text-primary">Support:</span>
+                            <span class="key-level-value">$41,500</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="key-level-label text-primary">Resistance:</span>
+                            <span class="key-level-value">$43,200</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="key-level-label text-danger">Strong Resistance:</span>
+                            <span class="key-level-value">$45,000</span>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="market-data mt-4">
+                        <h6>Additional Data</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="data-metric">
+                                    <div class="metric-label">24h Volume</div>
+                                    <div class="metric-value">$32.5B</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="data-metric">
+                                    <div class="metric-label">Market Cap</div>
+                                    <div class="metric-value">$825.7B</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="data-metric">
+                                    <div class="metric-label">ATH</div>
+                                    <div class="metric-value">$69,000</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="data-metric">
+                                    <div class="metric-label">ATH Change</div>
+                                    <div class="metric-value negative">-38.2%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technical Indicators -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Technical Indicators</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-sm indicators-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Indicator</th>
+                                    <th>Value</th>
+                                    <th>Signal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RSI (14)</td>
+                                    <td>58.25</td>
+                                    <td><span class="badge bg-primary">Neutral</span></td>
+                                </tr>
+                                <tr>
+                                    <td>MACD</td>
+                                    <td>+125.4</td>
+                                    <td><span class="badge bg-success">Buy</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Stoch RSI</td>
+                                    <td>0.82</td>
+                                    <td><span class="badge bg-warning">Overbought</span></td>
+                                </tr>
+                                <tr>
+                                    <td>CCI</td>
+                                    <td>+112.5</td>
+                                    <td><span class="badge bg-success">Buy</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ADX</td>
+                                    <td>24.8</td>
+                                    <td><span class="badge bg-primary">Neutral</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Awesome Oscillator</td>
+                                    <td>+218.5</td>
+                                    <td><span class="badge bg-success">Buy</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Momentum</td>
+                                    <td>+1240</td>
+                                    <td><span class="badge bg-success">Buy</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Bull/Bear Power</td>
+                                    <td>+625.4</td>
+                                    <td><span class="badge bg-success">Buy</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Summary:</span>
+                        <strong class="text-success">Strong Buy</strong>
+                    </div>
+                    <div class="signals-summary mt-2">
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <small>Sell (1)</small>
+                            <small>Neutral (2)</small>
+                            <small>Buy (7)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Signal Generator -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Signal Generator</h5>
+                    <span class="badge bg-purple text-white">AI Enhanced</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-center">Generate a trade signal based on current technical analysis</p>
+                    <div class="d-grid">
+                        <button id="generate-signal-btn" class="btn btn-primary">
+                            <i class="fas fa-bolt me-2"></i> Generate Signal
+                        </button>
+                    </div>
+                    
+                    <div id="signal-result" class="mt-4 d-none">
+                        <div class="signal-box">
+                            <div class="signal-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 signal-type text-success">
+                                    <i class="fas fa-arrow-up me-2"></i> BUY
+                                </h5>
+                                <span class="signal-confidence">87% Confidence</span>
+                            </div>
+                            <div class="signal-details mt-3">
+                                <p class="mb-2">Multiple bullish indicators detected:</p>
+                                <ul class="signal-reasons">
+                                    <li>MACD bullish crossover</li>
+                                    <li>RSI recovering from oversold</li>
+                                    <li>Bullish engulfing pattern</li>
+                                    <li>Increasing volume profile</li>
+                                </ul>
+                                <div class="signal-price mt-3 d-flex justify-content-between">
+                                    <span>Entry Price:</span>
+                                    <span class="current-price">$42,235.45</span>
+                                </div>
+                                <div class="signal-targets mt-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Target 1:</span>
+                                        <span class="target-price">$43,300.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Target 2:</span>
+                                        <span class="target-price">$44,700.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Stop Loss:</span>
+                                        <span class="target-price text-danger">$40,950.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="signal-actions mt-3 d-flex justify-content-between">
+                                <button class="btn btn-outline-primary">
+                                    <i class="fas fa-file-invoice-dollar"></i> Paper Trade
+                                </button>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Signal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeframe-selector .btn {
+    min-width: 40px;
+}
+
+.pattern-container {
+    border: 1px solid var(--purple-medium);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.pattern-container.detected {
+    border-color: var(--success);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+}
+
+.pattern-visual {
+    text-align: center;
+    margin: 15px 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pattern-visual img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.pattern-details {
+    font-size: 0.9rem;
+}
+
+.current-price #current-btc-price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.price-change.positive {
+    color: var(--success);
+}
+
+.price-change.negative {
+    color: var(--danger);
+}
+
+.key-level-label {
+    font-weight: 500;
+}
+
+.data-metric {
+    margin-bottom: 15px;
+}
+
+.data-metric .metric-label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.data-metric .metric-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.data-metric .metric-value.negative {
+    color: var(--danger);
+}
+
+.indicators-table th,
+.indicators-table td {
+    padding: 0.5rem 1rem;
+    vertical-align: middle;
+}
+
+.signals-summary .progress {
+    height: 6px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+
+.badge.bg-purple {
+    background-color: var(--purple-medium);
+}
+
+.signal-box {
+    border: 1px solid var(--purple-medium);
+    border-radius: 10px;
+    padding: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+.signal-type {
+    font-weight: bold;
+}
+
+.signal-confidence {
+    font-size: 0.9rem;
+    color: var(--info);
+}
+
+.signal-reasons {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.signal-reasons li {
+    margin-bottom: 5px;
+}
+
+.current-price {
+    font-weight: bold;
+}
+
+.target-price {
+    font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Simulate chart initialization
+    initAdvancedChart();
+    
+    // Event listeners for chart controls
+    document.querySelectorAll('.chart-type').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelector('.chart-type.active').classList.remove('active');
+            this.classList.add('active');
+            updateChartType(this.dataset.type);
+        });
+    });
+    
+    // Event listeners for indicators
+    document.querySelectorAll('.indicator-option').forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleIndicator(this.dataset.indicator);
+        });
+    });
+    
+    // Event listener for timeframe buttons
+    document.querySelectorAll('.timeframe-selector .btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.timeframe-selector .btn').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-dark');
+            });
+            this.classList.remove('btn-dark');
+            this.classList.add('btn-primary');
+            updateTimeframe(this.dataset.timeframe);
+        });
+    });
+    
+    // Event listener for signal generation
+    document.getElementById('generate-signal-btn').addEventListener('click', function() {
+        generateSignal();
+    });
+});
+
+function initAdvancedChart() {
+    // This is a placeholder for chart initialization
+    console.log('Advanced chart initialized');
+}
+
+function updateChartType(type) {
+    // This is a placeholder for updating chart type
+    console.log(`Updating chart type to: ${type}`);
+}
+
+function toggleIndicator(indicator) {
+    // This is a placeholder for toggling indicators
+    console.log(`Toggling indicator: ${indicator}`);
+}
+
+function updateTimeframe(timeframe) {
+    // This is a placeholder for updating timeframe
+    console.log(`Updating timeframe to: ${timeframe}`);
+    
+    // Show loader
+    document.querySelector('.chart-loader').classList.remove('d-none');
+    
+    // Simulate data loading
+    setTimeout(() => {
+        document.querySelector('.chart-loader').classList.add('d-none');
+    }, 1000);
+}
+
+function generateSignal() {
+    // This is a placeholder for signal generation
+    console.log('Generating trading signal');
+    
+    // Show loading animation
+    const button = document.getElementById('generate-signal-btn');
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Analyzing...';
+    
+    // Simulate signal generation
+    setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-bolt me-2"></i> Generate Signal';
+        
+        // Show signal result
+        document.getElementById('signal-result').classList.remove('d-none');
+    }, 2000);
+}
+</script>
+{% endblock %}

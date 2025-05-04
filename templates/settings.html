@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block title %}Settings | NeuralTrade X{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Settings</h1>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-3">
+            <!-- Settings Navigation -->
+            <div class="card mb-4">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush rounded-0">
+                        <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                            <i class="fas fa-user me-2"></i> Profile
+                        </a>
+                        <a href="#api" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-key me-2"></i> API Keys
+                        </a>
+                        <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </a>
+                        <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-shield-alt me-2"></i> Security
+                        </a>
+                        <a href="#preferences" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-sliders-h me-2"></i> Preferences
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Account Info</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-placeholder me-3" style="width: 50px; height: 50px; background-color: var(--purple-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <span class="text-light">{{ current_user.username[0].upper() }}</span>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">{{ current_user.username }}</h6>
+                            <small class="text-muted">{{ current_user.email }}</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small class="text-muted">Plan</small>
+                        <p class="mb-0">Free Plan</p>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small class="text-muted">Member Since</small>
+                        <p class="mb-0">{{ current_user.created_at.strftime('%b %d, %Y') }}</p>
+                    </div>
+                    
+                    <div class="d-grid mt-3">
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-arrow-up me-2"></i>Upgrade Plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-9">
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Profile Tab -->
+                <div class="tab-pane fade show active" id="profile">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Profile Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username" value="{{ current_user.username }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" value="{{ current_user.email }}">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="first-name" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="first-name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="last-name" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="last-name">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="timezone" class="form-label">Timezone</label>
+                                    <select class="form-select" id="timezone">
+                                        <option value="UTC">UTC</option>
+                                        <option value="US/Eastern">US/Eastern</option>
+                                        <option value="US/Central">US/Central</option>
+                                        <option value="US/Mountain">US/Mountain</option>
+                                        <option value="US/Pacific">US/Pacific</option>
+                                        <option value="Europe/London">Europe/London</option>
+                                        <option value="Europe/Berlin">Europe/Berlin</option>
+                                        <option value="Asia/Tokyo">Asia/Tokyo</option>
+                                    </select>
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API Keys Tab -->
+                <div class="tab-pane fade" id="api">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Exchange API Keys</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Connect your exchange API keys to enable live trading functionality. We never store your API secrets in plain text.
+                            </div>
+                            
+                            <form>
+                                <h6 class="mb-3">Binance</h6>
+                                <div class="mb-3">
+                                    <label for="binance-api-key" class="form-label">API Key</label>
+                                    <input type="text" class="form-control" id="binance-api-key" placeholder="Enter your Binance API key">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="binance-api-secret" class="form-label">API Secret</label>
+                                    <input type="password" class="form-control" id="binance-api-secret" placeholder="Enter your Binance API secret">
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="api-trading-enabled">
+                                    <label class="form-check-label" for="api-trading-enabled">Enable live trading</label>
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary">Save API Keys</button>
+                            </form>
+                            
+                            <hr>
+                            
+                            <h6 class="mb-3 mt-4">Permissions Required</h6>
+                            <ul>
+                                <li>Read access to account information</li>
+                                <li>Read market data</li>
+                                <li>Spot trading permissions (if trading enabled)</li>
+                            </ul>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                For security, we recommend creating API keys with IP restrictions and limited permissions.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notifications Tab -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Notification Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-3">Email Notifications</h6>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="notify-signals" checked>
+                                <label class="form-check-label" for="notify-signals">New Trading Signals</label>
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="notify-trades" checked>
+                                <label class="form-check-label" for="notify-trades">Trade Executions</label>
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="notify-price-alerts">
+                                <label class="form-check-label" for="notify-price-alerts">Price Alerts</label>
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="notify-news">
+                                <label class="form-check-label" for="notify-news">Market News & Updates</label>
+                            </div>
+                            
+                            <h6 class="mb-3 mt-4">Push Notifications</h6>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="push-signals" checked>
+                                <label class="form-check-label" for="push-signals">New Trading Signals</label>
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="push-trades" checked>
+                                <label class="form-check-label" for="push-trades">Trade Executions</label>
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="push-price-alerts" checked>
+                                <label class="form-check-label" for="push-price-alerts">Price Alerts</label>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary">Save Preferences</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security Tab -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Security Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <h6 class="mb-3">Change Password</h6>
+                                <div class="mb-3">
+                                    <label for="current-password" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="current-password">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="new-password" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="new-password">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirm-password" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirm-password">
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary">Update Password</button>
+                            </form>
+                            
+                            <hr>
+                            
+                            <h6 class="mb-3 mt-4">Two-Factor Authentication</h6>
+                            <p>Enhance your account security by enabling 2FA.</p>
+                            <button type="button" class="btn btn-outline-primary">Enable 2FA</button>
+                            
+                            <hr>
+                            
+                            <h6 class="mb-3 mt-4">Session Management</h6>
+                            <p>You are currently logged in from:</p>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <i class="fas fa-desktop me-2"></i>
+                                    <span>Current Browser (Chrome)</span>
+                                </div>
+                                <span class="badge bg-success">Active Now</span>
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline-danger mt-3">
+                                <i class="fas fa-sign-out-alt me-2"></i>Log Out All Other Devices
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preferences Tab -->
+                <div class="tab-pane fade" id="preferences">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Trading Preferences</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-3">Default Settings</h6>
+                            
+                            <div class="mb-3">
+                                <label for="default-quantity" class="form-label">Default Trade Quantity (BTC)</label>
+                                <input type="number" class="form-control" id="default-quantity" value="0.01" step="0.001" min="0.001">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="default-leverage" class="form-label">Default Leverage (for futures)</label>
+                                <select class="form-select" id="default-leverage">
+                                    <option value="1">1x</option>
+                                    <option value="2">2x</option>
+                                    <option value="3">3x</option>
+                                    <option value="5">5x</option>
+                                    <option value="10">10x</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="risk-per-trade" class="form-label">Risk Per Trade (% of portfolio)</label>
+                                <select class="form-select" id="risk-per-trade">
+                                    <option value="1">1%</option>
+                                    <option value="2" selected>2%</option>
+                                    <option value="3">3%</option>
+                                    <option value="5">5%</option>
+                                </select>
+                            </div>
+                            
+                            <h6 class="mb-3 mt-4">Chart Preferences</h6>
+                            
+                            <div class="mb-3">
+                                <label for="default-timeframe" class="form-label">Default Timeframe</label>
+                                <select class="form-select" id="default-timeframe">
+                                    <option value="15m">15 Minutes</option>
+                                    <option value="1h" selected>1 Hour</option>
+                                    <option value="4h">4 Hours</option>
+                                    <option value="1d">1 Day</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Default Indicators</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-ma" checked>
+                                    <label class="form-check-label" for="show-ma">Moving Averages</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-bollinger" checked>
+                                    <label class="form-check-label" for="show-bollinger">Bollinger Bands</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-rsi" checked>
+                                    <label class="form-check-label" for="show-rsi">RSI</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="show-macd" checked>
+                                    <label class="form-check-label" for="show-macd">MACD</label>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary">Save Preferences</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

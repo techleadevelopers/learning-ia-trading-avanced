@@ -1,0 +1,650 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Otimizada | NeuralTrade X{% endblock %}
+{% block page_title %}Trading Dashboard <span class="badge bg-primary ms-2">Pro</span>{% endblock %}
+
+{% block authenticated_content %}
+<div class="dashboard-grid">
+
+    <div class="grid-col-8" data-animation="animate-fade-up" data-delay="0.1">
+        <div class="card h-100"> <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">BTC/USDT Advanced Chart</h5>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-outline-primary me-3" id="chart-toggle-btn">
+                        <i class="fas fa-expand-alt"></i> Maximizar
+                    </button>
+                    <div class="interval-selector btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary active" data-interval="1h">1H</button>
+                        <button class="btn btn-outline-primary" data-interval="4h">4H</button>
+                        <button class="btn btn-outline-primary" data-interval="1d">1D</button>
+                        <button class="btn btn-outline-primary" data-interval="1w">1W</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="trading-view-container" id="tradingview-widget" style="height: 650px;"> <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div class="text-center">
+                            <div class="loading-spinner mb-3"></div>
+                            <p class="text-white">Carregando TradingView...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-col-4" data-animation="animate-fade-up" data-delay="0.2">
+        <div class="card h-100 mb-4"> <div class="card-header d-flex justify-content-between align-items-center">
+                 <h5 class="mb-0">Sinais e Análise IA</h5>
+                 <button id="generate-live-signal" class="btn btn-sm btn-primary">
+                    <i class="fas fa-bolt me-1"></i> Novo Sinal
+                </button>
+             </div>
+            <div class="card-body" style="max-height: 650px; overflow-y: auto;"> <div class="signal-processing text-center mb-4">
+                    <div class="ai-brain-animation">
+                        <i class="fas fa-brain"></i>
+                        <div class="ai-brain-waves"></div>
+                    </div>
+                    <h6 class="mt-3">IA analisando mercado...</h6>
+                    <p class="text-light">Processando 27 indicadores</p> <div class="progress mt-2 mb-1" style="height: 6px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 85%"></div>
+                    </div>
+                    <small class="text-light">Próxima atualização em 38 segundos</small> </div>
+
+                <div id="latest-signals" class="signal-container mb-4">
+                    <div class="signal-card new-signal">
+                         <div class="signal-header">
+                             <div class="signal-type signal-type-buy">
+                                 <i class="fas fa-arrow-up me-2"></i>
+                                 COMPRAR @ $42,987.50
+                             </div>
+                             <div class="signal-confidence confidence-high">
+                                 85% Confiança
+                             </div>
+                         </div>
+                         <div class="signal-body">
+                              <div class="signal-reason">
+                                  <p class="mb-2">Sinal de compra forte baseado em múltiplos indicadores técnicos e análise de padrões.</p>
+                              </div>
+                             <div class="signal-indicators">
+                                <div class="indicator-chip"><div class="indicator-icon icon-bullish"><i class="fas fa-wave-square"></i></div><span>RSI: 32.4</span></div>
+                                <div class="indicator-chip"><div class="indicator-icon icon-bullish"><i class="fas fa-chart-line"></i></div><span>MACD Crossover</span></div>
+                                <div class="indicator-chip"><div class="indicator-icon icon-bullish"><i class="fas fa-chart-area"></i></div><span>Suporte Forte</span></div>
+                            </div>
+                         </div>
+                         <div class="signal-footer">
+                            <span class="signal-time"><i class="far fa-clock me-1"></i> 10 min atrás</span>
+                            <div class="signal-actions">
+                                <button class="btn btn-sm btn-primary me-2" onclick="handleAIActions('paper_trade')">Paper</button>
+                                <button class="btn btn-sm btn-success" onclick="showSignalDetails(this)">Ver</button>
+                            </div>
+                        </div>
+                     </div>
+                     <div class="signal-card">
+                         <div class="signal-header">
+                             <div class="signal-type signal-type-sell">
+                                 <i class="fas fa-arrow-down me-2"></i>
+                                 VENDER @ $43,125.80
+                             </div>
+                             <div class="signal-confidence confidence-medium">
+                                 72% Confiança
+                             </div>
+                         </div>
+                         <div class="signal-body">
+                            <div class="signal-reason"><p class="mb-2">Sinal de venda baseado em divergência de RSI e níveis de resistência.</p></div>
+                            <div class="signal-indicators">
+                                <div class="indicator-chip"><div class="indicator-icon icon-bearish"><i class="fas fa-wave-square"></i></div><span>RSI: 73.8</span></div>
+                                <div class="indicator-chip"><div class="indicator-icon icon-bearish"><i class="fas fa-chart-line"></i></div><span>Resistência</span></div>
+                            </div>
+                         </div>
+                         <div class="signal-footer">
+                            <span class="signal-time"><i class="far fa-clock me-1"></i> 2 h atrás</span>
+                            <div class="signal-actions">
+                                <button class="btn btn-sm btn-primary me-2" onclick="handleAIActions('paper_trade')">Paper</button>
+                                <button class="btn btn-sm btn-success" onclick="showSignalDetails(this)">Ver</button>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+                
+                 <hr>
+                 <div class="ai-model-info mt-3">
+                     <h6 class="mb-3">Neural Engine X</h6>
+                     <div class="model-item d-flex justify-content-between mb-2"><span>Modelo:</span><span class="model-value">DeepTraderX Pro</span></div>
+                     <div class="model-item d-flex justify-content-between mb-2"><span>Indicadores:</span><span class="model-value">27/30</span></div>
+                     <div class="model-item d-flex justify-content-between mb-2"><span>Intervalo:</span><span class="model-value">1H-4H-1D</span></div>
+                     <div class="model-item d-flex justify-content-between mb-2"><span>Last Training:</span><span class="model-value">2 horas atrás</span></div>
+                     <div class="progress mt-2 mb-1" style="height: 6px;"><div class="progress-bar bg-success" role="progressbar" style="width: 88.5%"></div></div>
+                     <div class="d-flex justify-content-between"><small>Precisão: 88.5%</small><small>230 sinais</small></div>
+                     <div class="ai-actions mt-3">
+                        <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="openModelManager()"><i class="fas fa-cogs me-1"></i> Gerenciar Modelos</button>
+                        <button class="btn btn-outline-secondary btn-sm w-100" onclick="handleAIActions('settings')"><i class="fas fa-sliders-h me-1"></i> Configurações</button>
+                    </div>
+                 </div>
+            </div>
+             <div class="card-footer d-flex justify-content-between align-items-center">
+                <a href="{{ url_for('signals') }}" class="btn btn-link btn-sm">Ver Todos Sinais</a>
+                <div class="ai-status online">
+                    <i class="fas fa-circle me-1"></i> Monitorando
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-col-12" data-animation="animate-fade-up" data-delay="0.3">
+        <div class="ai-insight-container">
+            <div class="ai-insight-header">
+                <div class="ai-insight-title">
+                    <div class="ai-icon"><i class="fas fa-brain"></i></div>
+                    <div>
+                        <h5 class="mb-0">NeuralX AI Assistant</h5>
+                        <p class="text-light mb-0">Última atualização: <span id="ai-update-time">há 5 minutos</span></p>
+                    </div>
+                </div>
+                <div class="ai-confidence">
+                    <div class="confidence-meter"><div class="confidence-value confidence-high"></div></div>
+                    <span>85% Confidence</span>
+                </div>
+            </div>
+            <div class="ai-prediction-tabs">
+                <button class="prediction-tab active" onclick="switchPredictionTab('market')">Análise Mercado</button>
+                <button class="prediction-tab" onclick="switchPredictionTab('24h')">Previsão 24h</button>
+                <button class="prediction-tab" onclick="switchPredictionTab('7d')">Previsão 7d</button>
+            </div>
+            <div class="prediction-content">
+                <div class="prediction-main">
+                     <div class="prediction-summary">
+                        <div>
+                            <h6 class="text-light mb-1">Preço Alvo (24h)</h6>
+                            <div class="prediction-price">$46,875.00</div>
+                            <p class="mb-0 text-light">Próxima atualização em 30 min</p>
+                        </div>
+                        <div class="prediction-change positive">
+                            <i class="fas fa-arrow-up"></i> <span>+5.75%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="prediction-factors">
+                    <h6 class="mb-3 text-light">Fatores de Análise</h6>
+                    <div class="factor-item"><div class="factor-icon factor-positive"><i class="fas fa-chart-line"></i></div><div class="factor-info"><div class="factor-name"><span>Tendência</span><span class="factor-score positive">+2.5</span></div><div class="factor-bar"><div class="factor-value positive" style="width: 75%;"></div></div></div></div>
+                    <div class="factor-item"><div class="factor-icon factor-positive"><i class="fas fa-chart-bar"></i></div><div class="factor-info"><div class="factor-name"><span>Momentum</span><span class="factor-score positive">+1.8</span></div><div class="factor-bar"><div class="factor-value positive" style="width: 68%;"></div></div></div></div>
+                    <div class="factor-item"><div class="factor-icon factor-negative"><i class="fas fa-volume-up"></i></div><div class="factor-info"><div class="factor-name"><span>Volume</span><span class="factor-score negative">-0.7</span></div><div class="factor-bar"><div class="factor-value negative" style="width: 35%;"></div></div></div></div>
+                    <div class="factor-item"><div class="factor-icon factor-positive"><i class="fas fa-clipboard-check"></i></div><div class="factor-info"><div class="factor-name"><span>Análise Técnica</span><span class="factor-score positive">+3.1</span></div><div class="factor-bar"><div class="factor-value positive" style="width: 85%;"></div></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-col-3" data-animation="animate-fade-up" data-delay="0.4">
+        <div class="stats-card">
+            <div class="stats-icon" style="background: linear-gradient(135deg, #6c5b7b, #355c7d);"><i class="fas fa-landmark"></i></div>
+            <div class="stats-info">
+                <p class="stats-title">Preço Bitcoin</p>
+                <h3 class="stats-value" id="live-btc-price-card">$42,987.65</h3>
+                <div class="stats-trend trend-up"><i class="fas fa-arrow-up me-1"></i><span>+2.45% (24h)</span></div>
+            </div>
+            <canvas class="mini-chart mini-chart-canvas" id="price-mini-chart" data-chart-color="#6c5b7b"></canvas>
+        </div>
+    </div>
+    <div class="grid-col-3" data-animation="animate-fade-up" data-delay="0.5">
+        <div class="stats-card">
+            <div class="stats-icon" style="background: linear-gradient(135deg, #a2b9bc, #6b7a8f);"><i class="fas fa-chart-area"></i></div>
+            <div class="stats-info">
+                <p class="stats-title">Sinais IA Precisão</p>
+                <h3 class="stats-value">72%</h3>
+                <div class="stats-trend trend-up"><i class="fas fa-arrow-up me-1"></i><span>+3% (semana)</span></div>
+            </div>
+            <canvas class="mini-chart mini-chart-canvas" id="signals-mini-chart" data-chart-color="#4361ee"></canvas>
+        </div>
+    </div>
+    <div class="grid-col-3" data-animation="animate-fade-up" data-delay="0.6">
+        <div class="stats-card">
+            <div class="stats-icon" style="background: linear-gradient(135deg, #4cc9f0, #80ffdb);"><i class="fas fa-bolt"></i></div>
+            <div class="stats-info">
+                <p class="stats-title">Performance P/L</p>
+                <h3 class="stats-value positive-value" id="profit-loss">+$3,245.35</h3>
+                <div class="stats-trend trend-up"><i class="fas fa-arrow-up me-1"></i><span>+18.7% (30d)</span></div>
+            </div>
+            <canvas class="mini-chart mini-chart-canvas" id="profit-mini-chart" data-chart-color="#4cc9f0"></canvas>
+        </div>
+    </div>
+    <div class="grid-col-3" data-animation="animate-fade-up" data-delay="0.7">
+        <div class="stats-card">
+            <div class="stats-icon" style="background: linear-gradient(135deg, #f72585, #b5179e);"><i class="fas fa-globe"></i></div>
+            <div class="stats-info">
+                <p class="stats-title">Market Cap</p>
+                <h3 class="stats-value">$825.7B</h3>
+                <div class="stats-trend trend-up"><i class="fas fa-arrow-up me-1"></i><span>+1.2% (24h)</span></div>
+            </div>
+            <canvas class="mini-chart mini-chart-canvas" id="marketcap-mini-chart" data-chart-color="#f72585"></canvas>
+        </div>
+    </div>
+
+    <div class="grid-col-8" data-animation="animate-fade-up" data-delay="0.8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Operações Ativas</h5>
+                <a href="{{ url_for('paper_trading') }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus me-1"></i> Nova Operação</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table active-trades-table mb-0">
+                        <thead><tr><th>Tipo</th><th>Entrada</th><th>Atual</th><th>Qtd</th><th>P/L</th><th>Duração</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr class="trade-row trade-buy"><td><span class="badge bg-success">COMPRA</span></td><td>$41,450.00</td><td>$42,987.65</td><td>0.05 BTC</td><td class="positive-value">+$76.88 (3.70%)</td><td>12h 34m</td><td><button class="btn btn-sm btn-danger">Fechar</button></td></tr>
+                            <tr class="trade-row trade-sell"><td><span class="badge bg-danger">VENDA</span></td><td>$43,850.00</td><td>$42,987.65</td><td>0.02 BTC</td><td class="positive-value">+$17.25 (1.98%)</td><td>8h 12m</td><td><button class="btn btn-sm btn-danger">Fechar</button></td></tr>
+                            <tr class="trade-row trade-buy"><td><span class="badge bg-success">COMPRA</span></td><td>$42,950.00</td><td>$42,987.65</td><td>0.03 BTC</td><td class="positive-value">+$1.13 (0.09%)</td><td>3h 45m</td><td><button class="btn btn-sm btn-danger">Fechar</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-col-4" data-animation="animate-fade-up" data-delay="0.9">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Portfolio</h5></div>
+            <div class="card-body">
+                <div class="portfolio-summary mb-4">
+                    <div class="d-flex justify-content-between mb-2"><h6>Valor Total</h6><h4 class="mb-0">$10,245.35</h4></div>
+                    <div class="d-flex justify-content-between"><span>P/L Total</span><span class="positive-value">+$245.35 (2.45%)</span></div>
+                </div>
+                <div class="portfolio-allocation"><h6 class="mb-3">Alocação</h6><div class="d-flex justify-content-between mb-2"><span>Bitcoin (BTC)</span><span>0.0531 BTC</span></div><div class="progress mb-3" style="height: 6px;"><div class="progress-bar bg-warning" role="progressbar" style="width: 62%"></div></div><div class="d-flex justify-content-between mb-2"><span>USD Tether (USDT)</span><span>$3,875.00</span></div><div class="progress mb-3" style="height: 6px;"><div class="progress-bar bg-primary" role="progressbar" style="width: 38%"></div></div></div>
+                <div class="portfolio-stats mt-4"><div class="row text-center"><div class="col-4"><h6>Win Rate</h6><div class="stat-value">76%</div></div><div class="col-4"><h6>Trades</h6><div class="stat-value">17</div></div><div class="col-4"><h6>ROI</h6><div class="stat-value positive-value">+5.2%</div></div></div></div>
+                <div class="d-grid mt-4"><a href="{{ url_for('paper_trading') }}" class="btn btn-primary"><i class="fas fa-chart-line me-2"></i> Gerenciar Portfolio</a></div>
+            </div>
+        </div>
+    </div>
+
+</div> <div class="modal fade" id="signalDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Detalhes do Sinal</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <div class="modal-body">
+                 <div class="row"> <div class="col-md-6"> <div class="signal-detail-card"> <div class="signal-detail-type signal-type-buy"> <i class="fas fa-arrow-up me-2"></i> COMPRAR @ $42,987.50 </div><div class="signal-detail-confidence"> <div class="confidence-meter"><div class="confidence-value confidence-high" style="width: 85%;"></div></div><span>85% Confiança</span> </div><div class="signal-detail-info mt-4"> <h6>Análise Técnica</h6> <p>Este sinal de compra é baseado em um padrão de reversão bullish após um suporte forte ter sido testado. Múltiplos indicadores técnicos estão sinalizando uma potencial alta.</p><h6 class="mt-3">Indicadores-chave</h6> <ul class="signal-detail-indicators"> <li><i class="fas fa-check-circle text-success me-2"></i> RSI está saindo da zona de sobrevenda (32.4)</li><li><i class="fas fa-check-circle text-success me-2"></i> MACD está formando um crossover bullish</li><li><i class="fas fa-check-circle text-success me-2"></i> Preço está testando um suporte forte em $41,800</li><li><i class="fas fa-check-circle text-success me-2"></i> Aumento de volume nas últimas 3 horas</li><li><i class="fas fa-check-circle text-success me-2"></i> Padrão de vela "Hammer" formado no gráfico de 4 horas</li></ul> <h6 class="mt-3">Gerado por</h6> <p>DeepTraderX Pro v2.4</p></div></div></div><div class="col-md-6"> <div class="signal-detail-strategy"> <h6>Estratégia Recomendada</h6> <div class="strategy-levels"> <div class="d-flex justify-content-between mb-2"><span>Entrada:</span><span class="level-value">$42,987.50</span></div><div class="d-flex justify-content-between mb-2"><span>Stop Loss:</span><span class="level-value negative-value">$41,500.00 (-3.46%)</span></div><div class="d-flex justify-content-between mb-2"><span>Alvo 1:</span><span class="level-value positive-value">$44,500.00 (+3.52%)</span></div><div class="d-flex justify-content-between mb-2"><span>Alvo 2:</span><span class="level-value positive-value">$46,800.00 (+8.87%)</span></div><div class="d-flex justify-content-between mb-2"><span>Risk/Reward Ratio:</span><span class="level-value">1:2.5</span></div></div><div class="signal-chart mt-4"> <img src="{{ url_for('static', filename='images/signal-chart.png') }}" alt="Signal Chart" class="img-fluid"> </div><div class="signal-actions mt-4"> <div class="row"> <div class="col-6"> <button class="btn btn-primary btn-sm w-100" data-bs-dismiss="modal" onclick="handleAIActions('paper_trade')"> <i class="fas fa-file-invoice-dollar me-2"></i> Paper Trade </button> </div><div class="col-6"> <button class="btn btn-success btn-sm w-100" data-bs-dismiss="modal" onclick="handleAIActions('live_trade')"> <i class="fas fa-rocket me-2"></i> Trade Real </button> </div></div></div></div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modelManagerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Gerenciador de Modelos de IA</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <div class="modal-body">
+                 <div class="models-container"> <div class="row"> <div class="col-md-6"> <div class="model-card active"> <div class="model-header"> <div class="model-name"> <h6>DeepTraderX Pro</h6> <span class="badge bg-success">Ativo</span> </div><div class="model-version">v2.4</div></div><div class="model-body"> <p class="model-description">Modelo premium com análise avançada de 30 indicadores técnicos, padrões de candlestick e análise de ordem de fluxo.</p><div class="model-stats"> <div class="stat-item"><div class="stat-label">Precisão</div><div class="stat-value">88.5%</div></div><div class="stat-item"><div class="stat-label">Sinais</div><div class="stat-value">230</div></div><div class="stat-item"><div class="stat-label">Win/Loss</div><div class="stat-value">3.5:1</div></div></div></div><div class="model-footer"> <button class="btn btn-outline-primary btn-sm w-100" disabled> <i class="fas fa-check me-2"></i> Modelo Ativo </button> </div></div></div><div class="col-md-6"> <div class="model-card"> <div class="model-header"> <div class="model-name"> <h6>NeuralTrend Master</h6> <span class="badge bg-secondary">Inativo</span> </div><div class="model-version">v1.8</div></div><div class="model-body"> <p class="model-description">Modelo especializado em análise de tendências e reversões, com foco em intervalos longos (4h, 1d, 1w).</p><div class="model-stats"> <div class="stat-item"><div class="stat-label">Precisão</div><div class="stat-value">76.2%</div></div><div class="stat-item"><div class="stat-label">Sinais</div><div class="stat-value">142</div></div><div class="stat-item"><div class="stat-label">Win/Loss</div><div class="stat-value">2.8:1</div></div></div></div><div class="model-footer"> <button class="btn btn-primary btn-sm w-100"> <i class="fas fa-play me-2"></i> Ativar Modelo </button> </div></div></div></div><div class="row mt-4"> <div class="col-md-6"> <div class="model-card locked"> <div class="model-header"> <div class="model-name"> <h6>HyperVolume Analyzer</h6> <span class="badge bg-warning">Ultra</span> </div><div class="model-version">v3.0</div></div><div class="model-body"> <p class="model-description">Modelo exclusivo para assinantes Ultra, com análise avançada de volume e liquidez em tempo real.</p><div class="model-stats"> <div class="stat-item"><div class="stat-label">Precisão</div><div class="stat-value">92.4%</div></div><div class="stat-item"><div class="stat-label">Sinais</div><div class="stat-value">310</div></div><div class="stat-item"><div class="stat-label">Win/Loss</div><div class="stat-value">4.2:1</div></div></div></div><div class="model-footer"> <button class="btn btn-warning btn-sm w-100"> <i class="fas fa-crown me-2"></i> Upgrade para Ultra </button> </div></div></div><div class="col-md-6"> <div class="model-card"> <div class="model-header"> <div class="model-name"> <h6>Custom Model</h6> <span class="badge bg-info">Criado por Você</span> </div><div class="model-version">Custom</div></div><div class="model-body"> <p class="model-description">Crie e treine seu próprio modelo de IA com base em seus indicadores e estratégias preferidos.</p><div class="custom-model-editor"> <button class="btn btn-outline-primary btn-sm w-100 mb-2"> <i class="fas fa-plus me-2"></i> Criar Novo Modelo </button> <button class="btn btn-outline-secondary btn-sm w-100"> <i class="fas fa-upload me-2"></i> Importar Modelo </button> </div></div></div></div></div></div>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button><button type="button" class="btn btn-primary">Salvar Alterações</button></div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+/* Garante cor de texto clara como padrão para o tema escuro */
+body, .card, .stats-card, .modal-content {
+    color: var(--gray-light, #e0e0e0); /* Usa variável CSS ou fallback */
+}
+h1, h2, h3, h4, h5, h6, .stats-value {
+     color: var(--gray-light, #e0e0e0); /* Garante cabeçalhos claros */
+}
+.stats-title {
+    color: var(--gray, #adb5bd); /* Título do card um pouco mais suave */
+}
+
+/* New Styles for Enhanced Dashboard (Mantidos) */
+.section-header { margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--purple-medium); }
+.ai-brain-animation { position: relative; width: 60px; height: 60px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.ai-brain-animation i { font-size: 2.5rem; color: var(--purple-neon); z-index: 2; }
+.ai-brain-waves { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: rgba(136, 84, 208, 0.2); z-index: 1; animation: pulseBrain 2s infinite; }
+@keyframes pulseBrain { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+.signal-container { margin-top: 0; } /* Removido margin-top original */
+.signal-card { border: 1px solid var(--purple-medium); border-radius: 10px; padding: 0.8rem; margin-bottom: 0.8rem; transition: all 0.3s ease; background-color: var(--dark-card); } /* Padding e margin ajustados */
+.signal-card:hover { box-shadow: 0 0 15px rgba(88, 43, 255, 0.2); transform: translateY(-2px); }
+.signal-card.new-signal { border-color: var(--success); animation: pulseSignal 2s infinite; }
+@keyframes pulseSignal { 0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); } }
+.signal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.signal-type { font-weight: bold; font-size: 1rem; } /* Tamanho ajustado */
+.signal-type-buy { color: var(--success); }
+.signal-type-sell { color: var(--danger); }
+.signal-confidence { font-size: 0.8rem; padding: 0.2rem 0.4rem; border-radius: 20px; } /* Padding ajustado */
+.confidence-high { color: var(--success); } .confidence-medium { color: var(--warning); } .confidence-low { color: var(--danger); }
+.signal-reason p { font-size: 0.85rem; margin-bottom: 0.5rem !important; } /* Tamanho e margin ajustados */
+.signal-indicators { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.indicator-chip { display: flex; align-items: center; background-color: rgba(88, 43, 255, 0.1); padding: 0.2rem 0.4rem; border-radius: 20px; font-size: 0.75rem; }
+.indicator-icon { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0.4rem; font-size: 0.7rem;}
+.icon-bullish { background-color: rgba(40, 167, 69, 0.2); color: var(--success); }
+.icon-bearish { background-color: rgba(220, 53, 69, 0.2); color: var(--danger); }
+.signal-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.signal-time { font-size: 0.75rem; color: var(--gray); }
+.signal-actions .btn { padding: 0.2rem 0.4rem; font-size: 0.75rem; } /* Botões menores */
+.ai-status { font-size: 0.8rem; padding: 0.25rem 0.5rem; border-radius: 20px; background-color: rgba(255, 255, 255, 0.1); }
+.ai-status.online { color: var(--success); } .ai-status.online i { color: var(--success); animation: blink 2s infinite; }
+@keyframes blink { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+.ai-model-info { padding: 0.5rem 0; } /* Padding ajustado */
+.model-item { font-size: 0.85rem; } .model-value { font-weight: 500; } .model-value.positive { color: var(--success); } .model-value.negative { color: var(--danger); }
+.active-trades-table { color: var(--gray-light); }
+.active-trades-table thead th { border-top: none; border-bottom-width: 1px; font-weight: 500; text-transform: uppercase; font-size: 0.8rem; padding: 0.75rem 1rem; }
+.active-trades-table tbody td { padding: 0.75rem 1rem; vertical-align: middle; }
+.trade-row { transition: background-color 0.3s ease; } .trade-row:hover { background-color: rgba(88, 43, 255, 0.1); }
+.trade-buy { border-left: 3px solid var(--success); } .trade-sell { border-left: 3px solid var(--danger); }
+.portfolio-summary h4 { color: var(--gray-light); font-weight: 700; }
+.portfolio-allocation .progress { height: 6px; border-radius: 3px; }
+.portfolio-stats .stat-value { font-size: 1.2rem; font-weight: 500; }
+.modal-content { background-color: var(--dark-medium); color: var(--gray-light); border: 1px solid var(--purple-medium); }
+.modal-header { border-bottom: 1px solid var(--purple-medium); } .modal-footer { border-top: 1px solid var(--purple-medium); }
+.signal-detail-card { padding: 1rem; border-radius: 10px; background-color: var(--dark-card); height: 100%; }
+.signal-detail-type { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+.signal-detail-confidence { margin-bottom: 1.5rem; }
+.confidence-meter { height: 8px; background-color: rgba(255, 255, 255, 0.1); border-radius: 4px; margin-bottom: 0.5rem; }
+.confidence-value { height: 100%; border-radius: 4px; } .confidence-high { background-color: var(--success); } .confidence-medium { background-color: var(--warning); } .confidence-low { background-color: var(--danger); }
+.signal-detail-indicators { padding-left: 1.5rem; } .signal-detail-indicators li { margin-bottom: 0.5rem; }
+.strategy-levels { padding: 1rem; background-color: var(--dark-card); border-radius: 10px; margin-bottom: 1.5rem; }
+.level-value { font-weight: 500; }
+.model-card { border: 1px solid var(--purple-medium); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; background-color: var(--dark-card); }
+.model-card.active { border-color: var(--success); box-shadow: 0 0 10px rgba(40, 167, 69, 0.2); }
+.model-card.locked { border-color: var(--warning); }
+.model-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.model-name h6 { margin-bottom: 0.25rem; } .model-version { font-size: 0.8rem; opacity: 0.7; }
+.model-description { font-size: 0.9rem; margin-bottom: 1rem; }
+.model-stats { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+.stat-item { text-align: center; } .stat-label { font-size: 0.8rem; opacity: 0.7; } .stat-value { font-size: 1.1rem; font-weight: 500; }
+#chart-toggle-btn { transition: all 0.3s ease; } #chart-toggle-btn:hover { transform: scale(1.05); }
+.trading-view-container { border-radius: 0 0 10px 10px; overflow: hidden; }
+</style>
+
+<script>
+// This script contains additional functionality for the dashboard
+
+document.addEventListener('DOMContentLoaded', function() {
+    // TradingView widget initialization with better settings
+    initTradingViewWidget();
+    
+    // Initialize mini charts
+    initMiniCharts();
+    
+    // Initialize event listeners for dashboard components
+    initDashboardListeners();
+    
+    // Start live AI signal monitoring simulation
+    simulateAISignalMonitoring();
+});
+
+function initTradingViewWidget() {
+    const tradingViewContainer = document.getElementById('tradingview-widget');
+    if (!tradingViewContainer) return;
+    
+    // Create and append TradingView widget script
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/tv.js';
+    script.async = true;
+    
+    script.onload = function() {
+        new TradingView.widget({
+            "width": "100%", // Use width 100%
+            "height": 650,   // Match container height
+            "symbol": "BINANCE:BTCUSDT",
+            "interval": "60",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "br",
+            "toolbar_bg": "#1a1a1a",
+            "enable_publishing": false,
+            "hide_top_toolbar": false,
+            "allow_symbol_change": true,
+            "save_image": true,
+            "container_id": "tradingview-widget",
+            "studies": [
+                "RSI@tv-basicstudies",
+                "MAExp@tv-basicstudies",
+                "MACD@tv-basicstudies",
+                "BB@tv-basicstudies",
+                "Volume@tv-basicstudies"
+            ],
+            "show_popup_button": true,
+            "popup_width": "1000",
+            "popup_height": "650"
+        });
+        
+        // Remove loading indicator
+        const loadingIndicator = tradingViewContainer.querySelector('.d-flex');
+        if (loadingIndicator) {
+            setTimeout(() => {
+                loadingIndicator.style.display = 'none';
+            }, 2000); // Delay slightly longer if needed
+        }
+    };
+    
+    // Append script to head AFTER container exists
+    document.head.appendChild(script);
+}
+
+function initMiniCharts() {
+    // This would initialize mini charts using a chart library
+    console.log('Mini charts initialized (simulated)');
+    document.querySelectorAll('.mini-chart-canvas').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        const chartColor = canvas.dataset.chartColor || '#6c5b7b';
+        // Simple simulation draw
+        ctx.strokeStyle = chartColor; ctx.lineWidth = 2; ctx.beginPath();
+        let x = 0; let y = canvas.height / 2; ctx.moveTo(x, y);
+        while (x < canvas.width) { x += 5; y = Math.max(5, Math.min(canvas.height - 5, y + (Math.random() * 10 - 5))); ctx.lineTo(x, y); }
+        ctx.stroke();
+    });
+}
+
+function initDashboardListeners() {
+    // Interval selector buttons
+    document.querySelectorAll('.interval-selector .btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelector('.interval-selector .btn.active').classList.remove('active');
+            this.classList.add('active');
+            updateChartInterval(this.dataset.interval);
+        });
+    });
+    // Chart toggle button
+    const chartToggleBtn = document.getElementById('chart-toggle-btn');
+    if (chartToggleBtn) { chartToggleBtn.addEventListener('click', toggleChartSize); }
+    // Generate live signal button
+    const generateSignalBtn = document.getElementById('generate-live-signal');
+    if (generateSignalBtn) { generateSignalBtn.addEventListener('click', generateAISignal); }
+    // Set up modal event handlers
+    setupModalHandlers();
+}
+
+function updateChartInterval(interval) {
+    console.log(`Updating chart to ${interval} interval`);
+    // Reload or update TradingView widget interval here
+     const widgetContainer = document.getElementById('tradingview-widget');
+     const iframe = widgetContainer.querySelector('iframe');
+     if (iframe && iframe.contentWindow) {
+         // This method might not work depending on TradingView's implementation and cross-origin policies
+         try {
+             iframe.contentWindow.postMessage({type: 'setResolution', data: interval}, '*');
+             console.log(`Sent interval change request: ${interval}`);
+         } catch (e) {
+             console.error("Could not change interval via postMessage:", e);
+             // Fallback: Reinitialize widget (might be slow)
+             // initTradingViewWidget(); 
+         }
+     } else {
+          // Fallback: Reinitialize widget if iframe not found or accessible
+          // initTradingViewWidget();
+          console.warn("TradingView widget iframe not accessible for interval change.");
+     }
+}
+
+
+function toggleChartSize() {
+    const chartContainer = document.querySelector('.trading-view-container');
+    const toggleBtn = document.getElementById('chart-toggle-btn');
+    const currentHeight = chartContainer.style.height || '650px'; // Default height if not set
+    
+    if (currentHeight === '650px') {
+        chartContainer.style.height = '90vh'; // Use viewport height for maximization
+        toggleBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Minimizar';
+    } else {
+        chartContainer.style.height = '650px';
+        toggleBtn.innerHTML = '<i class="fas fa-expand-alt"></i> Maximizar';
+    }
+    // Might need to tell TradingView widget to resize after container change
+}
+
+function simulateAISignalMonitoring() {
+    const progressBar = document.querySelector('.signal-processing .progress-bar');
+    const timeRemaining = document.querySelector('.signal-processing small');
+    if (!progressBar || !timeRemaining) return;
+    let seconds = 38; let width = 85;
+    const intervalId = setInterval(() => {
+        if (seconds <= 0) {
+            generateAISignal(); // Gera sinal ao zerar
+            seconds = Math.floor(Math.random() * 30) + 30; // Randomiza próximo tempo (30-60s)
+            width = 5; // Reinicia barra
+            progressBar.style.width = `${width}%`; 
+            timeRemaining.textContent = `Analisando...`; // Mensagem enquanto gera
+            // Simula um delay na geração antes de reiniciar contagem
+            setTimeout(() => {
+                 timeRemaining.textContent = `Próxima atualização em ${seconds} segundos`;
+            }, 1500);
+        } else {
+             seconds--;
+             width = Math.max(5, width - (100 / (seconds+1))); // Ajusta a barra
+             progressBar.style.width = `${width}%`;
+             timeRemaining.textContent = `Próxima atualização em ${seconds} segundos`;
+        }
+    }, 1000);
+}
+
+
+function generateAISignal() {
+    console.log('Generating new AI signal');
+    // Não mostra notificação a cada sinal para não poluir
+    // showNotification('Novo sinal de IA gerado!', 'info'); 
+    
+    const processingElement = document.querySelector('.signal-processing');
+    if (processingElement) {
+         // A animação do cérebro já está visível, só precisamos adicionar o sinal
+         const signalContainer = document.getElementById('latest-signals');
+         if (signalContainer) {
+             const signalType = Math.random() > 0.5 ? 'buy' : 'sell';
+             const btcPriceElement = document.getElementById('live-btc-price-card');
+             const currentPrice = btcPriceElement ? btcPriceElement.innerText : '$?.??'; // Pega preço real se disponível
+             
+             const newSignalElement = createSignalElement(signalType, currentPrice);
+             
+             // Adiciona novo sinal no topo com animação
+             if (signalContainer.firstChild) {
+                 signalContainer.insertBefore(newSignalElement, signalContainer.firstChild);
+             } else {
+                 signalContainer.appendChild(newSignalElement);
+             }
+             
+             // Anima o novo sinal
+             newSignalElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); // Rola para o novo sinal
+             newSignalElement.classList.add('new-signal'); // Adiciona classe para pulsação CSS
+             
+             // Remove a classe de pulsação após alguns segundos
+             setTimeout(() => {
+                 newSignalElement.classList.remove('new-signal');
+             }, 4000); // Duração da animação pulseSignal * 2
+
+             // Limita número de sinais visíveis para não sobrecarregar
+             while (signalContainer.children.length > 10) { 
+                 signalContainer.removeChild(signalContainer.lastChild);
+             }
+         }
+    }
+}
+
+
+function createSignalElement(type, price) {
+    const signalElement = document.createElement('div');
+    signalElement.className = 'signal-card';
+    const confidence = Math.floor(Math.random() * 40) + 60; // 60% - 99%
+    const confidenceClass = confidence >= 85 ? 'confidence-high' : (confidence >= 70 ? 'confidence-medium' : 'confidence-low');
+    const iconType = type === 'buy' ? 'fa-arrow-up' : 'fa-arrow-down';
+    const signalTypeClass = type === 'buy' ? 'signal-type-buy' : 'signal-type-sell';
+    const typeText = type === 'buy' ? 'COMPRAR' : 'VENDER';
+    signalElement.innerHTML = `
+        <div class="signal-header">
+            <div class="signal-type ${signalTypeClass}"><i class="fas ${iconType} me-2"></i>${typeText} @ ${price}</div>
+            <div class="signal-confidence ${confidenceClass}">${confidence}% Conf.</div>
+        </div>
+        <div class="signal-body">
+             <div class="signal-reason"><p class="mb-2">${type === 'buy' ? 'Oportunidade detectada: padrões técnicos e volume.' : 'Sinal identificado: reversão e divergência.'}</p></div>
+            <div class="signal-indicators">${generateRandomIndicators(type)}</div>
+        </div>
+        <div class="signal-footer">
+            <span class="signal-time"><i class="far fa-clock me-1"></i> agora</span>
+            <div class="signal-actions">
+                <button class="btn btn-sm btn-primary me-2" onclick="handleAIActions('paper_trade')">Paper</button>
+                <button class="btn btn-sm btn-success" onclick="showSignalDetails(this)">Ver</button>
+            </div>
+        </div>`;
+    return signalElement;
+}
+
+function generateRandomIndicators(type) {
+    const indicators = []; const iconClass = type === 'buy' ? 'icon-bullish' : 'icon-bearish';
+    const rsiValue = type === 'buy' ? (Math.random() * 20 + 20).toFixed(1) : (Math.random() * 20 + 65).toFixed(1);
+    indicators.push(`<div class="indicator-chip"><div class="indicator-icon ${iconClass}"><i class="fas fa-wave-square"></i></div><span>RSI: ${rsiValue}</span></div>`);
+    indicators.push(`<div class="indicator-chip"><div class="indicator-icon ${iconClass}"><i class="fas fa-chart-line"></i></div><span>${type === 'buy' ? 'MACD Cross' : 'MACD Div.'}</span></div>`);
+    const thirdIndicators = [{icon: 'fa-chart-area', text: type === 'buy' ? 'Sup Forte' : 'Res Forte'}, {icon: 'fa-chart-bar', text: type === 'buy' ? 'Vol Cresc' : 'Vol Decr'}, {icon: 'fa-chart-pie', text: type === 'buy' ? 'Candle Bull' : 'Candle Bear'}];
+    const randomIndicator = thirdIndicators[Math.floor(Math.random() * thirdIndicators.length)];
+    indicators.push(`<div class="indicator-chip"><div class="indicator-icon ${iconClass}"><i class="fas ${randomIndicator.icon}"></i></div><span>${randomIndicator.text}</span></div>`);
+    return indicators.join('');
+}
+
+function setupModalHandlers() {
+    window.showSignalDetails = function(buttonElement) {
+        const signalCard = buttonElement.closest('.signal-card'); if (!signalCard) return;
+        // Populacionar modal com dados do signalCard (simplificado aqui)
+        const modalElement = document.getElementById('signalDetailsModal');
+        // ... (lógica para pegar dados do card e colocar no modal) ...
+        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        modal.show();
+    };
+    window.openModelManager = function() {
+         const modalElement = document.getElementById('modelManagerModal');
+         const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+         modal.show();
+    };
+    window.handleAIActions = function(action) {
+        switch(action) {
+            case 'paper_trade': console.log("Abrir modal/form de Paper Trade"); showNotification('Ação: Abrir Paper Trade', 'info'); break; // Modificar para abrir ordem
+            case 'live_trade': showNotification('Funcionalidade de trading ao vivo disponível apenas no plano Ultra', 'warning'); break;
+            case 'settings': window.location.href = "{{ url_for('settings') }}"; break;
+            default: console.log(`AI action: ${action}`);
+        }
+    };
+}
+
+window.switchPredictionTab = function(tabId) {
+    console.log(`Switching to prediction tab: ${tabId}`);
+    document.querySelectorAll('.prediction-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelector(`.prediction-tab[onclick*="${tabId}"]`).classList.add('active');
+    // Atualizar conteúdo da previsão aqui...
+};
+
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notification-container') || createNotificationContainer();
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `<div class="notification-icon"><i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i></div><div class="notification-content"><p>${message}</p></div><button class="notification-close"><i class="fas fa-times"></i></button>`;
+    container.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 10);
+    const closeBtn = notification.querySelector('.notification-close');
+    const removeNotification = () => { notification.classList.remove('show'); setTimeout(() => notification.remove(), 300); };
+    closeBtn.addEventListener('click', removeNotification);
+    setTimeout(removeNotification, 5000);
+}
+function createNotificationContainer() {
+    const container = document.createElement('div');
+    container.id = 'notification-container';
+    container.style.position = 'fixed'; container.style.top = '20px'; container.style.right = '20px'; container.style.zIndex = '1050';
+    document.body.appendChild(container);
+    return container;
+}
+
+</script>
+{% endblock %}

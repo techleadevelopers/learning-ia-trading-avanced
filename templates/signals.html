@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Trading Signals | NeuralTrade X{% endblock %}
+{% block page_title %}AI Signals <span class="badge bg-primary ms-2">Live</span>{% endblock %}
+
+{% block authenticated_content %}
+<div id="signals-container" class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Trading Signals</h1>
+        <button id="generate-signal" class="btn btn-primary">
+            <i class="fas fa-bolt me-2"></i> Generate Signal
+        </button>
+    </div>
+    
+    <!-- Alerts Container -->
+    <div id="signals-alerts"></div>
+    
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p class="lead">AI-powered trading signals based on advanced technical analysis and market patterns.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary signal-filter active" data-filter="all">All</button>
+                <button type="button" class="btn btn-outline-success signal-filter" data-filter="buy">Buy</button>
+                <button type="button" class="btn btn-outline-danger signal-filter" data-filter="sell">Sell</button>
+                <button type="button" class="btn btn-outline-warning signal-filter" data-filter="hold">Hold</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Signals List -->
+            <div id="signals-list" class="mb-4">
+                {% if signals %}
+                    {% for signal in signals %}
+                        <div class="signal signal-{{ signal.signal_type.lower() }}" data-id="{{ signal.id }}" data-type="{{ signal.signal_type }}">
+                            <div class="signal-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    {% if signal.signal_type == 'BUY' %}
+                                        <i class="fas fa-arrow-up text-success me-2"></i>
+                                    {% elif signal.signal_type == 'SELL' %}
+                                        <i class="fas fa-arrow-down text-danger me-2"></i>
+                                    {% else %}
+                                        <i class="fas fa-minus text-warning me-2"></i>
+                                    {% endif %}
+                                    {{ signal.signal_type }} @ ${{ signal.price|round(2) }}
+                                </h5>
+                                <span class="badge {% if signal.confidence >= 0.8 %}badge-success{% elif signal.confidence >= 0.6 %}badge-warning{% else %}badge-danger{% endif %}">
+                                    {{ (signal.confidence * 100)|round|int }}% Confidence
+                                </span>
+                            </div>
+                            <div class="signal-body mt-2">
+                                <p class="mb-1"><strong>Reason:</strong> {{ signal.reason }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted">
+                                        <i class="far fa-clock"></i> {{ signal.created_at|humanize }}
+                                    </small>
+                                    <div class="btn-group">
+                                        <a href="{{ url_for('paper_trading') }}?signal_id={{ signal.id }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-file-invoice-dollar"></i> Paper Trade
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-success signal-action" data-action="live-trade" data-id="{{ signal.id }}">
+                                            <i class="fas fa-chart-line"></i> Live Trade
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-info-circle fa-2x"></i>
+                        <p class="mt-2">No trading signals available yet</p>
+                        <button class="btn btn-primary mt-2" id="first-signal-btn">
+                            <i class="fas fa-bolt"></i> Generate First Signal
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Signal Info Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">About Trading Signals</h5>
+                </div>
+                <div class="card-body">
+                    <p>Our AI-powered trading signals analyze multiple technical indicators and market patterns to identify potential entry and exit points.</p>
+                    
+                    <h6 class="mt-3">Signal Types:</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <span class="badge bg-success me-2">BUY</span>
+                            Suggests entering a long position
+                        </li>
+                        <li class="mb-2">
+                            <span class="badge bg-danger me-2">SELL</span>
+                            Suggests entering a short position or exiting a long position
+                        </li>
+                        <li class="mb-2">
+                            <span class="badge bg-warning me-2">HOLD</span>
+                            Suggests maintaining current positions or waiting for clearer signals
+                        </li>
+                    </ul>
+                    
+                    <h6 class="mt-3">Indicators Used:</h6>
+                    <ul>
+                        <li>Moving Averages (SMA, EMA)</li>
+                        <li>RSI (Relative Strength Index)</li>
+                        <li>MACD (Moving Average Convergence Divergence)</li>
+                        <li>Bollinger Bands</li>
+                        <li>Volume Analysis</li>
+                        <li>Support/Resistance Levels</li>
+                    </ul>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Signals are for informational purposes only and should not be considered as financial advice.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Signal Performance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Win Rate:</span>
+                        <span class="positive-value">72%</span>
+                    </div>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar" style="width: 72%"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Average Return:</span>
+                        <span class="positive-value">+2.8%</span>
+                    </div>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar" style="width: 68%"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Signal Count (30d):</span>
+                        <span>24</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-3">
+                        <div class="text-center">
+                            <h6>BUY Signals</h6>
+                            <h5 class="positive-value">78%</h5>
+                            <small>Win Rate</small>
+                        </div>
+                        <div class="text-center">
+                            <h6>SELL Signals</h6>
+                            <h5 class="positive-value">65%</h5>
+                            <small>Win Rate</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

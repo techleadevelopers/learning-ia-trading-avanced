@@ -1,0 +1,86 @@
+# Ambiente virtual
+.venv/
+venv/
+ENV/
+env/
+
+# Arquivos Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+
+# Configurações do VSCode (se usar)
+.vscode/
+
+# Arquivos temporários de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de teste e cobertura
+htmlcov/
+.tox/
+.coverage
+.cache
+pytest_cache/
+
+# Arquivos de pacotes distribuíveis
+build/
+dist/
+*.egg-info/
+
+# Arquivos de transportes ou cache customizados
+tesnspor/
+*.db
+
+# Arquivos do mypy
+.mypy_cache/
+
+# Configurações pessoais (se houver)
+*.env
+.env.*
+# Ambiente virtual
+.venv/
+venv/
+ENV/
+env/
+
+# Arquivos Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+
+# Configurações do VSCode (se usar)
+.vscode/
+
+# Arquivos temporários de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de teste e cobertura
+htmlcov/
+.tox/
+.coverage
+.cache
+pytest_cache/
+
+# Arquivos de pacotes distribuíveis
+build/
+dist/
+*.egg-info/
+
+# Arquivos de transportes ou cache customizados
+tesnspor/
+*.db
+
+# Arquivos do mypy
+.mypy_cache/
+
+# Configurações pessoais (se houver)
+*.env
+.env.*

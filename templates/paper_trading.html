@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Paper Trading | NeuralTrade X{% endblock %}
+
+{% block content %}
+<div id="paper-trading-container" class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Paper Trading</h1>
+        <button id="refresh-data" class="btn btn-outline-primary">
+            <i class="fas fa-sync-alt me-2"></i> Refresh Data
+        </button>
+    </div>
+    
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        Paper trading allows you to practice trading with virtual funds without risking real money.
+    </div>
+    
+    <!-- Alerts Container -->
+    <div id="trading-alerts"></div>
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <!-- Trade Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">New Trade</h5>
+                </div>
+                <div class="card-body">
+                    <form id="paper-trade-form">
+                        <div class="mb-3">
+                            <label for="trade-type" class="form-label">Trade Type</label>
+                            <select class="form-select" id="trade-type" required>
+                                <option value="" selected disabled>Select type</option>
+                                <option value="BUY">BUY</option>
+                                <option value="SELL">SELL</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="trade-quantity" class="form-label">BTC Quantity</label>
+                            <input type="number" class="form-control" id="trade-quantity" placeholder="0.01" step="0.001" min="0.001" required>
+                            <div class="form-text">Min: 0.001 BTC</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Current Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="current-price" value="42,500.00" readonly>
+                                <button class="btn btn-outline-secondary" type="button" onclick="TradingModule.updatePrice()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Total Value</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control" id="total-value" value="0.00" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" id="submit-trade">Execute Trade</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Portfolio Summary -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Portfolio Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>Total Value</h6>
+                        <h4 id="portfolio-value">$10,000.00</h4>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>Profit/Loss</h6>
+                        <h5 id="profit-loss" class="positive-value">+$0.00 (0.00%)</h5>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                        <div class="text-center">
+                            <h6>BTC Balance</h6>
+                            <p>0.0000 BTC</p>
+                        </div>
+                        <div class="text-center">
+                            <h6>USDT Balance</h6>
+                            <p>$10,000.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <!-- Active Trades -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Active Trades</h5>
+                    <span class="badge bg-primary">Virtual</span>
+                </div>
+                <div class="card-body">
+                    <div id="active-trades">
+                        <!-- No active trades message -->
+                        <div class="text-center py-4 empty-message">No active trades</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trade History -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Trade History</h5>
+                </div>
+                <div class="card-body">
+                    <div id="trade-history">
+                        <!-- No trade history message -->
+                        <div class="text-center py-4 empty-message">No trade history</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.active-trade {
+    border-left: 4px solid var(--purple-neon);
+}
+
+.closed-trade {
+    border-left: 4px solid var(--purple-accent);
+}
+
+.highlight-trade {
+    animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+    0% { background-color: var(--purple-accent); }
+    100% { background-color: var(--purple-medium); }
+}
+</style>
+{% endblock %}

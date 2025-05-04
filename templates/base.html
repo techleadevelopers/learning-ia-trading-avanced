@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NeuralTrade X - Ultimate AI-Powered Trading Platform{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+    
+    <!-- ApexCharts for Advanced Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.js"></script>
+    
+    <!-- TradingView Widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+    
+    <!-- Particles.js for Background Effect -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- Other CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <!-- Modern Dashboard Layout for Logged In Users -->
+    <div class="dashboard-container">
+        <!-- Side Navigation -->
+        <nav id="sidebar" class="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="NeuralTrade X Logo" class="logo-img">
+                    <span class="logo-text">NeuralTrade<span class="text-gradient">X</span></span>
+                </div>
+                <button id="sidebarCollapseBtn" class="sidebar-toggle d-none d-lg-block">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    {{ current_user.username[0].upper() }}
+                </div>
+                <div class="user-info">
+                    <h6 class="mb-0">{{ current_user.username }}</h6>
+                    <span class="user-status">
+                        <i class="fas fa-circle status-circle"></i> Pro Trader
+                    </span>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-label">Main</li>
+                <li class="menu-item {% if request.path == url_for('dashboard') %}active{% endif %}">
+                    <a href="{{ url_for('dashboard') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-gauge-high"></i>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == url_for('signals') %}active{% endif %}">
+                    <a href="{{ url_for('signals') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-bolt"></i>
+                        <span class="menu-text">AI Signals</span>
+                        <span class="badge rounded-pill ml-auto">New</span>
+                    </a>
+                </li>
+                
+                <li class="menu-label">Trading</li>
+                <li class="menu-item {% if request.path == url_for('paper_trading') %}active{% endif %}">
+                    <a href="{{ url_for('paper_trading') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-chart-line"></i>
+                        <span class="menu-text">Paper Trading</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == url_for('backtest') %}active{% endif %}">
+                    <a href="{{ url_for('backtest') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-hourglass-half"></i>
+                        <span class="menu-text">Backtest</span>
+                    </a>
+                </li>
+                
+                <li class="menu-label">Analysis</li>
+                <li class="menu-item {% if request.path == url_for('ai_predictions') %}active{% endif %}">
+                    <a href="{{ url_for('ai_predictions') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-brain"></i>
+                        <span class="menu-text">AI Predictions</span>
+                    </a>
+                </li>
+                <li class="menu-item {% if request.path == url_for('technical_analysis') %}active{% endif %}">
+                    <a href="{{ url_for('technical_analysis') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-chart-column"></i>
+                        <span class="menu-text">Technical Analysis</span>
+                    </a>
+                </li>
+                
+                <li class="menu-label">Account</li>
+                <li class="menu-item {% if request.path == url_for('settings') %}active{% endif %}">
+                    <a href="{{ url_for('settings') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-gear"></i>
+                        <span class="menu-text">Settings</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('logout') }}" class="menu-link">
+                        <i class="menu-icon fa-solid fa-right-from-bracket"></i>
+                        <span class="menu-text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <div class="upgrade-pro">
+                    <img src="{{ url_for('static', filename='images/rocket.svg') }}" alt="Upgrade" class="upgrade-icon">
+                    <div class="upgrade-text">
+                        <h6 class="mb-0">Upgrade to Ultra</h6>
+                        <p class="small mb-0">Get advanced AI features</p>
+                    </div>
+                    <a href="#" class="btn btn-upgrade">Go</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-navbar">
+                <div class="container-fluid px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <button id="sidebarCollapseMobile" class="sidebar-toggle-mobile d-lg-none">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                            <div class="page-title">
+                                {% block page_title %}Dashboard{% endblock %}
+                            </div>
+                        </div>
+                        
+                        <div class="top-navbar-right d-flex align-items-center">
+                            <div class="market-status me-4">
+                                <div class="price-ticker">
+                                    <span class="ticker-symbol">BTC/USDT</span>
+                                    <span class="ticker-price" id="live-btc-price">$42,987.65</span>
+                                    <span class="ticker-change positive">+2.45%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="nav-item dropdown ai-assistant-dropdown me-3">
+                                <a class="nav-link dropdown-toggle" href="#" id="aiAssistantDropdown" role="button" data-bs-toggle="dropdown">
+                                    <div class="pulse-animation">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu ai-assistant-menu dropdown-menu-end" aria-labelledby="aiAssistantDropdown">
+                                    <div class="ai-assistant-header">
+                                        <h6 class="mb-0">Trading Assistant</h6>
+                                        <span class="badge bg-success">AI Powered</span>
+                                    </div>
+                                    <div class="ai-assistant-body">
+                                        <div class="ai-message">
+                                            <p>Welcome back! Bitcoin is showing bullish patterns on 4H timeframe. Would you like me to analyze the current market conditions?</p>
+                                        </div>
+                                        <div class="ai-actions mt-3">
+                                            <button class="btn btn-sm btn-outline-primary">Yes, analyze now</button>
+                                            <button class="btn btn-sm btn-outline-secondary">Maybe later</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="nav-item dropdown notifications-dropdown me-3">
+                                <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="notification-badge">3</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                                    <h6 class="dropdown-header">Notifications</h6>
+                                    <div class="notifications-list">
+                                        <a class="dropdown-item notification-item" href="#">
+                                            <div class="notification-icon bg-primary">
+                                                <i class="fas fa-bolt"></i>
+                                            </div>
+                                            <div class="notification-content">
+                                                <p class="mb-1">New buy signal generated</p>
+                                                <small class="text-muted">10 minutes ago</small>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item notification-item" href="#">
+                                            <div class="notification-icon bg-success">
+                                                <i class="fas fa-chart-line"></i>
+                                            </div>
+                                            <div class="notification-content">
+                                                <p class="mb-1">Your trade was executed successfully</p>
+                                                <small class="text-muted">1 hour ago</small>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item notification-item" href="#">
+                                            <div class="notification-icon bg-info">
+                                                <i class="fas fa-brain"></i>
+                                            </div>
+                                            <div class="notification-content">
+                                                <p class="mb-1">AI prediction model updated</p>
+                                                <small class="text-muted">2 hours ago</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a class="dropdown-item text-center small text-muted" href="#">Show all notifications</a>
+                                </div>
+                            </div>
+                            
+                            <div class="nav-item dropdown user-dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userNavDropdown" role="button" data-bs-toggle="dropdown">
+                                    <div class="user-avatar user-avatar-sm">
+                                        {{ current_user.username[0].upper() }}
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userNavDropdown">
+                                    <div class="user-dropdown-header">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-avatar">
+                                                {{ current_user.username[0].upper() }}
+                                            </div>
+                                            <div class="user-info ms-3">
+                                                <h6 class="mb-0">{{ current_user.username }}</h6>
+                                                <p class="small text-muted mb-0">{{ current_user.email }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ url_for('settings') }}">
+                                        <i class="fas fa-user-cog me-2"></i> Meu Perfil
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url_for('signals') }}">
+                                        <i class="fas fa-bolt me-2"></i> Meus Sinais
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url_for('paper_trading') }}">
+                                        <i class="fas fa-wallet me-2"></i> Minha Carteira
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-history me-2"></i> Histórico de Atividades
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-headset me-2"></i> Suporte
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-book me-2"></i> Documentação
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-crown me-2"></i> Upgrade para Ultra
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Sair
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            <div class="container-fluid px-4 mt-3">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show animate-fade-in">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
+            <!-- Page Content -->
+            <div class="page-content">
+                {% block authenticated_content %}{% endblock %}
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-0">&copy; 2025 NeuralTrade X. All rights reserved.</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p class="mb-0">v2.0 | Next-Gen AI-Powered Trading Platform</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- Regular layout for non-authenticated users -->
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="NeuralTrade X Logo" height="40" class="me-2">
+                <span>NeuralTrade<span class="text-gradient">X</span></span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('login') %}active{% endif %}" href="{{ url_for('login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('register') %}active{% endif %}" href="{{ url_for('register') }}">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show animate-fade-in">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <!-- Main Content -->
+    <main class="container py-4">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer py-3 mt-auto" style="background-color: var(--purple-medium);">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light">&copy; 2025 NeuralTrade X. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 text-light">Next-Gen AI-Powered Trading Platform</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endif %}
+    
+    <!-- Background Particles (only show on non-auth pages) -->
+    {% if not current_user.is_authenticated %}
+    <div id="particles-js" class="particles-container"></div>
+    {% endif %}
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Core JS -->
+    <script src="{{ url_for('static', filename='js/bitcoin-price.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/backtest.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/signals.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/trading.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modern.js') }}"></script>
+    
+    <!-- Additional JS -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
